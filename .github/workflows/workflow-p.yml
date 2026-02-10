@@ -1,0 +1,36 @@
+name: Workflow p
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verificar Pasta
+        run: test -d src
+
+      - name: Verificar CSS
+        run: test -f src/css/style.css
+
+      - name: Linting Profissional (HTMLHint)
+        uses: ./.github/actions/htmlhint
+        with:
+          target_pattern: 'src/index.html'
+
+      - name: Verificar Footer (obrigatório)
+        env:
+          ALUNO_NOME: 'Italo Aurelio'
+        run: |
+          grep -qi "<footer" src/index.html
+          grep -qi "$ALUNO_NOME" src/index.html
+
+      - name: Relatório de Auditoria
+        env:
+          ALUNO_NOME: 'Italo Aurelio'
+        run: echo "O código do aluno $ALUNO_NOME foi auditado, está seguindo as normas corretas e está pronto para o deploy!"

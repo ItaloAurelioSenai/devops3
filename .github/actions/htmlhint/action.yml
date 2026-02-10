@@ -1,0 +1,16 @@
+name: "htmlhint"
+description: "Run HTMLHint on a target pattern"
+inputs:
+  target_pattern:
+    description: "Glob or file path to lint"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Install HTMLHint
+      shell: bash
+      run: npm install -g htmlhint
+
+    - name: Run HTMLHint
+      shell: bash
+      run: htmlhint "${{ inputs.target_pattern }}"
